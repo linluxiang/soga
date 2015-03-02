@@ -61,7 +61,7 @@ func (this *TCPServer) Listen(port string) error {
 			break
 		}
 		if this.delegate != nil {
-			stream := NewIOStream(&conn)
+			stream := NewIOStream(conn)
 			this.delegate.HandleStream(stream)
 		}
 	}

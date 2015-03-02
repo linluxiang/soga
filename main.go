@@ -5,22 +5,20 @@ import (
 	//"io"
 	//"net"
 
-	"soga/network"
+	"github.com/linluxiang/soga/network"
 )
 
-type SimpleHanlder struct {
+type EchoHanlder struct {
 }
 
-func (this *SimpleHanlder) HandleStream(stream *network.IOStream) {
-	for {
-		data, _ := stream.Read(10)
-		fmt.Println("received: ", data)
-		stream.Write(data)
-	}
+func (this *EchoHanlder) HandleStream(stream *network.IOStream) {
+	data, _ := stream.ReadUntilClose()
+	fmt.Println("received: ", data)
+	stream.Write(data)
 }
 
 func main() {
-	handler := &SimpleHanlder{}
+	handler := &EchoHanlder{}
 	server := network.NewTCPServer("test")
 	server.SetDelegate(handler)
 	err := server.Listen(":5555")
