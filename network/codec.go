@@ -7,11 +7,16 @@ import (
 type CodecInterface interface {
 	Encode(v interface{}) (err error)
 	Decode() (msg interface{}, err error)
+	Close() error
 }
 
 type Codec struct {
 	encoder *Encoder
 	decoder *Decoder
+}
+
+type EncoderInterface interface {
+	Encode(v interface{}) (err error)
 }
 
 type Encoder struct {
