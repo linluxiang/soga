@@ -12,7 +12,7 @@ type Codec struct {
 	stream *network.IOStream
 }
 
-func NewCodec(stream *network.IOStream) *Codec {
+func NewCodec(stream *network.IOStream) network.CodecInterface {
 	return &Codec{stream: stream}
 }
 

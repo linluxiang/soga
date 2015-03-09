@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"net"
 
-	"encoding/binary"
+	//"encoding/binary"
 )
 
 type IOStream struct {
@@ -24,37 +24,14 @@ func NewIOStream(connection net.Conn) *IOStream {
 	return &stream
 }
 
-/*
-Here I have two kinds of implementation
-
-1. Using an infinite loop to read the byte into a buffer and when you wanna use it, take from this buffer.
-	problems:
-
-2. let the codec do the real read work, like read how many bytes or read until the end
-	this coded must be determined as a parameter of server
-
-3. when writing: make a linked list if still some bytes need to be write into buffer
-
-4. will it stop if there is not enough read byte read? I prefer block
-*/
-func (this *IOStream) readLoop() {
-	var msgSize int32
-	for {
-		binary.Read(this.readwriter, binary.BigEndian, &msgSize)
-	}
-
-}
-
-func (this *IOStream) writeLoop() {
-
-}
-
 func (this *IOStream) Write(buffer []byte) (nbyte int, err error) {
-	nbyte, err = this.connection.Write(buffer)
-	if nbyte < len(buffer) {
-
+	nbyte = 0
+	ntbyte := 0
+	for nbyte < len(buffer) {
+		ntbyte, err = this.connection.Write(buffer[nbyte:])
+		nbyte += ntbyte
 	}
-	return
+	return nbyte, err
 }
 
 func (this *IOStream) Read(rbyte int) (data []byte, err error) {
